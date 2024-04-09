@@ -12,15 +12,31 @@ RST             D8
 
 
 	Servo
-Amarelo 	~6
+Amarelo 	~3
 Vermelho	5V
 Marrom		GND
 
 
-	Motor de passo
-in1		D12
-in2		D11
-in3		D10
-in4		D9
+	Passo 01
+in1		D13
+in2		D12
+in3		D11
+in4		D10
 GND		GND
 VCC		5V
+
+	Passo 02
+in1		D7
+in2		D6
+in3		D5
+in4		D4
+GND		GND
+VCC		5V
+
+	LCD
+GND		GND
+VCC		5V
+SDA		Porta SDA
+SCL		Porta SCL
+
+
