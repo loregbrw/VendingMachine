@@ -5,7 +5,10 @@ Link motor de passo: https://www.aranacorp.com/pt/controlar-um-motor-de-passo-co
 Link keypad 4x4: https://www.robocore.net/tutoriais/usando-teclado-matricial-com-arduino <br>
 Link RFID com Mega: https://www.instructables.com/Interfacing-RFID-RC522-With-Arduino-MEGA-a-Simple-/<br>
 Link Servomotor: https://blog.fazedores.com/como-usar-servo-motor-com-arduino/<br>
-Link Servo: https://blog.fazedores.com/como-usar-servo-motor-com-arduino/
+Link Servo: https://blog.fazedores.com/como-usar-servo-motor-com-arduino/<br>
+<p>
+  Link para o docs da documentação: https://www.instructables.com/Interfacing-RFID-RC522-With-Arduino-MEGA-a-Simple-/
+</p>
 
 <hr>
 
