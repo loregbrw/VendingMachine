@@ -6,6 +6,7 @@ Link keypad 4x4: https://www.robocore.net/tutoriais/usando-teclado-matricial-com
 Link RFID com Mega: https://www.instructables.com/Interfacing-RFID-RC522-With-Arduino-MEGA-a-Simple-/<br>
 Link Servomotor: https://blog.fazedores.com/como-usar-servo-motor-com-arduino/<br>
 Link Servo: https://blog.fazedores.com/como-usar-servo-motor-com-arduino/<br>
+Link Imagem Pinos Arduino Mega: https://www.marinostore.com/arduino/arduino-mega-2560-r3 <br>
 <p>
   Link para o docs da documentação: https://docs.google.com/document/d/1rSgrE3YotzaOtS6BBUFxVIAzgdmtufVPdt3-B2ZccWA/edit?usp=sharing
 </p>
