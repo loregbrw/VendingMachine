@@ -7,7 +7,7 @@ Link RFID com Mega: https://www.instructables.com/Interfacing-RFID-RC522-With-Ar
 Link Servomotor: https://blog.fazedores.com/como-usar-servo-motor-com-arduino/<br>
 Link Servo: https://blog.fazedores.com/como-usar-servo-motor-com-arduino/<br>
 <p>
-  Link para o docs da documentação: https://www.instructables.com/Interfacing-RFID-RC522-With-Arduino-MEGA-a-Simple-/
+  Link para o docs da documentação: https://docs.google.com/document/d/1rSgrE3YotzaOtS6BBUFxVIAzgdmtufVPdt3-B2ZccWA/edit?usp=sharing
 </p>
 
 <hr>
