@@ -1,0 +1,26 @@
+
+
+	RFID
+SDA             D9
+SCK             D52
+MOSI            D51
+MISO            D50
+IRQ             N/A
+GND             GND
+RST             D8
+3.3V            3.3V
+
+
+	Servo
+Amarelo 	~6
+Vermelho	5V
+Marrom		GND
+
+
+	Motor de passo
+in1		D12
+in2		D11
+in3		D10
+in4		D9
+GND		GND
+VCC		5V
