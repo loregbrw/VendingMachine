@@ -1,49 +1,50 @@
-#include <Wire.h> //INCLUSÃO DA BIBLIOTECA NECESSÁRIA
-#include <SPI.h> //INCLUSÃO DE BIBLIOTECA
-#include <MFRC522.h> //INCLUSÃO DE BIBLIOTECA
+/*
+PINOUT:
+RC522 MODULE    Uno/Nano     MEGA
+SDA             D10          D9
+SCK             D13          D52
+MOSI            D11          D51
+MISO            D12          D50
+IRQ             N/A          N/A
+GND             GND          GND
+RST             D9           D8
+3.3V            3.3V         3.3V
+*/
+/* Include the standard Arduino SPI library */
+#include <SPI.h>
+/* Include the RFID library */
+#include <RFID.h>
 
-#define SS_PIN 10 //PINO SDA
-#define RST_PIN 9 //PINO DE RESET
+/* Define the DIO used for the SDA (SS) and RST (reset) pins. */
+#define SDA_DIO 9
+#define RESET_DIO 8
+/* Create an instance of the RFID library */
+RFID RC522(SDA_DIO, RESET_DIO); 
 
-MFRC522 rfid(SS_PIN, RST_PIN); //PASSAGEM DE PARÂMETROS REFERENTE AOS PINOS
-
-
-void setup(){
-
-  Wire.begin(); //INICIALIZA A BIBLIOTECA WIRE
-  SPI.begin(); //INICIALIZA O BARRAMENTO SPI
-  rfid.PCD_Init(); //INICIALIZA MFRC522
+void setup()
+{ 
+  Serial.begin(9600);
+  /* Enable the SPI interface */
+  SPI.begin(); 
+  /* Initialise the RFID reader */
+  RC522.init();
 }
 
-void loop() {
-  leituraRfid(); //CHAMA A FUNÇÃO RESPONSÁVEL PELA VALIDAÇÃO DA TAG RFID
+void loop()
+{
+  /* Has a card been detected? */
+  if (RC522.isCard())
+  {
+    /* If so then get its serial number */
+    RC522.readCardSerial();
+    Serial.println("Card detected:");
+    for(int i=0;i<5;i++)
+    {
+    Serial.print(RC522.serNum[i],DEC);
+    //Serial.print(RC522.serNum[i],HEX); //to print card detail in Hexa Decimal format
+    }
+    Serial.println();
+    Serial.println();
+  }
+  delay(1000);
 }
-
-//FUNÇÃO DE VALIDAÇÃO DA TAG RFID
-void leituraRfid(){
-  if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial()) //VERIFICA SE O CARTÃO PRESENTE NO LEITOR É DIFERENTE DO ÚLTIMO CARTÃO LIDO. CASO NÃO SEJA, FAZ
-    return; //RETORNA PARA LER NOVAMENTE
-
-  /***INICIO BLOCO DE CÓDIGO RESPONSÁVEL POR GERAR A TAG RFID LIDA***/
-  String strID = ""; 
-  for (byte i = 0; i < 4; i++) {
-    strID +=
-    (rfid.uid.uidByte[i] < 0x10 ? "0" : "") +
-    String(rfid.uid.uidByte[i], HEX) +
-    (i!=3 ? ":" : "");
-  }
-  strID.toUpperCase();
-/***FIM DO BLOCO DE CÓDIGO RESPONSÁVEL POR GERAR A TAG RFID LIDA***/
-
-  //O ENDEREÇO "27:41:AA:AB" DEVERÁ SER ALTERADO PARA O ENDEREÇO DA SUA TAG RFID QUE CAPTUROU ANTERIORMENTE
-  if (strID.indexOf("27:41:AA:AB") >= 0) { //SE O ENDEREÇO DA TAG LIDA FOR IGUAL AO ENDEREÇO INFORMADO, FAZ
-    Serial.println("SIM"); //LIGA O LED VERDE
-    delay(3000); //INTERVALO DE 4 SEGUNDOS
-  }else{ //SENÃO, FAZ (CASO A TAG LIDA NÃO SEJÁ VÁLIDA)
-    Serial.println("NÂO"); //LIGA O LED VERMELHO
-    delay(3000); ////INTERVALO DE 6 SEGUNDOS
-  }
-
-  rfid.PICC_HaltA(); //PARADA DA LEITURA DO CARTÃO
-  rfid.PCD_StopCrypto1(); //PARADA DA CRIPTOGRAFIA NO PCD
-  }
