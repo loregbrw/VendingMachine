@@ -10,8 +10,8 @@ const char TECLAS_MATRIZ[LINHAS][COLUNAS] = { // Matriz de caracteres (mapeament
   {'*', '0', '#', 'D'}
 };
 
-const byte PINOS_LINHAS[LINHAS] = {9, 8, 7, 6}; // Pinos de conexao com as linhas do teclado
-const byte PINOS_COLUNAS[COLUNAS] = {5, 4, 3, 2}; // Pinos de conexao com as colunas do teclado
+const byte PINOS_LINHAS[LINHAS] = {22, 23, 24, 25}; // Pinos de conexao com as linhas do teclado
+const byte PINOS_COLUNAS[COLUNAS] = {26, 27, 28, 29}; // Pinos de conexao com as colunas do teclado
 
 Keypad teclado_personalizado = Keypad(makeKeymap(TECLAS_MATRIZ), PINOS_LINHAS, PINOS_COLUNAS, LINHAS, COLUNAS); // Inicia teclado
 
