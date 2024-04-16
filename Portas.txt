@@ -1,3 +1,7 @@
+       Keypad
+
+LINHAS = { 22, 23, 24, 25 }
+COLUNAS = { 26, 27, 28, 29 }
 
 
 	RFID
