@@ -1,10 +1,12 @@
 #include <Keypad.h>
 #include <LiquidCrystal_I2C.h>
+#include <Servo.h>
 #include <SPI.h>
 #include <RFID.h>
 
-#define SDA_DIO 9
+#define SERVO 3
 #define RESET_DIO 8
+#define SDA_DIO 9
 
 const byte ROWS = 4;
 const byte COLUMNS = 4;
@@ -21,6 +23,9 @@ const char MATRIX_KEYS[ROWS][COLUMNS] = {
 Keypad this_keypad = Keypad(makeKeymap(MATRIX_KEYS), PINS_ROWS, PINS_COLUMNS, ROWS, COLUMNS);
 RFID RC522(SDA_DIO, RESET_DIO);
 LiquidCrystal_I2C lcd(0x27, 20, 4);
+Servo s;
+
+int pos;
 
 void setup() {
   Serial.begin(9600);
@@ -28,6 +33,8 @@ void setup() {
   lcd.backlight();
   SPI.begin();
   RC522.init();
+  s.attach(SERVO);
+  s.write(0);
 }
 
 void loop() {
@@ -58,4 +65,14 @@ void loop() {
     Serial.println();
     Serial.println();
   }
+
+  // for (pos = 0; pos < 90; pos++) {
+  //   s.write(pos);
+  //   delay(15);
+  // }
+  // delay(1000);
+  // for (pos = 90; pos >= 0; pos--) {
+  //   s.write(pos);
+  //   delay(15);
+  // }
 }
