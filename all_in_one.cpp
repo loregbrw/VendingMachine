@@ -27,8 +27,8 @@ double stepsPerRevolution = 2048;
 Keypad this_keypad = Keypad(makeKeymap(MATRIX_KEYS), PINS_ROWS, PINS_COLUMNS, ROWS, COLUMNS);
 RFID RC522(SDA_DIO, RESET_DIO);
 LiquidCrystal_I2C lcd(0x27, 20, 4);
-Stepper myStepper1(stepsPerRevolution, 10, 11, 12, 13);
-Stepper myStepper2(stepsPerRevolution, 4, 5, 6, 7);
+Stepper myStepper1(stepsPerRevolution, 13, 12, 11, 10);
+Stepper myStepper2(stepsPerRevolution, 7, 6, 5, 4);
 Servo s;
 
 void setup() {
@@ -82,7 +82,12 @@ void loop() {
   //   delay(15);
   // }
 
-  // myStepper1.step(stepsPerRevolution);
-  // myStepper2.step(stepsPerRevolution);
-
+  if (read_keys == 'A') {
+    myStepper1.step(stepsPerRevolution);
+    Serial.println("AAAAAA");
+  }
+  else if (read_keys == 'B') {
+    myStepper2.step(stepsPerRevolution);
+    Serial.println("BBBBBB");
+  }
 }
