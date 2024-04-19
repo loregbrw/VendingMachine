@@ -3,6 +3,7 @@
 #include <Servo.h>
 #include <SPI.h>
 #include <RFID.h>
+#include <Stepper.h>
 
 #define SERVO 3
 #define RESET_DIO 8
@@ -20,12 +21,15 @@ const char MATRIX_KEYS[ROWS][COLUMNS] = {
   { '*', '0', '#', 'D' }
 };
 
+int pos;
+double stepsPerRevolution = 2048;
+
 Keypad this_keypad = Keypad(makeKeymap(MATRIX_KEYS), PINS_ROWS, PINS_COLUMNS, ROWS, COLUMNS);
 RFID RC522(SDA_DIO, RESET_DIO);
 LiquidCrystal_I2C lcd(0x27, 20, 4);
+Stepper myStepper1(stepsPerRevolution, 10, 11, 12, 13);
+Stepper myStepper2(stepsPerRevolution, 4, 5, 6, 7);
 Servo s;
-
-int pos;
 
 void setup() {
   Serial.begin(9600);
@@ -35,6 +39,8 @@ void setup() {
   RC522.init();
   s.attach(SERVO);
   s.write(0);
+  myStepper1.setSpeed(10);
+  myStepper2.setSpeed(10);
 }
 
 void loop() {
@@ -75,4 +81,8 @@ void loop() {
   //   s.write(pos);
   //   delay(15);
   // }
+
+  // myStepper1.step(stepsPerRevolution);
+  // myStepper2.step(stepsPerRevolution);
+
 }
