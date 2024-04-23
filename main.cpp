@@ -31,6 +31,7 @@ LiquidCrystal_I2C lcd(0x27, 20, 4);
 Stepper myStepper1(stepsPerRevolution, 13, 12, 11, 10);
 Stepper myStepper2(stepsPerRevolution, 7, 6, 5, 4);
 Servo s;
+bool printed;
 
 void setup() {
   Serial.begin(9600);
@@ -42,68 +43,92 @@ void setup() {
   s.write(0);
   myStepper1.setSpeed(10);
   myStepper2.setSpeed(10);
+  printed = false;
+}
+
+void option(char key) {
+  if (key == '#') {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("====================");
+    lcd.setCursor(0, 1);
+    lcd.print("Aproxime o cartao");
+    lcd.setCursor(0, 2);
+    lcd.print("Valor: R$ 5,00");
+    lcd.setCursor(0, 3);
+    lcd.print("====================");
+
+    int reading = 0;
+    while (!RC522.isCard() && reading < 1000) {
+      Serial.println("Lendo cartao");
+      reading++;
+      Serial.println(reading);
+    }
+
+    if (reading > 1000) {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("====================");
+      lcd.setCursor(0, 1);
+      lcd.print("Pagamento expirado!");
+      lcd.setCursor(0, 2);
+      lcd.print("Compra cancelada");
+      lcd.setCursor(0, 3);
+      lcd.print("====================");
+      return;
+    }
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("====================");
+    lcd.setCursor(0, 1);
+    lcd.print("Pagamento confirmado!");
+    lcd.setCursor(0, 3);
+    lcd.print("====================");
+
+    myStepper1.step(stepsPerRevolution);
+    Serial.println("motor girandooo");
+    printed = false;
+    return
+  }
+
+  else if (key == '*') {
+    printed = false;
+    return
+  }
 }
 
 void loop() {
-  char read_keys = 'E';
-  read_keys = this_keypad.getKey();
+  char read_keys = this_keypad.getKey();
 
-  if (read_keys) {
-    Serial.println(read_keys);
-    Serial.println("OIOI");
+  if (!printed) {
+    lcd.clear();
+
+    lcd.setCursor(0, 0);
+    lcd.print("====================");
+    lcd.setCursor(0, 1);
+    lcd.print("Selecione um produto!");
+    lcd.setCursor(0, 3);
+    lcd.print("====================");
+
+    printed = true;
   }
 
-  lcd.clear();
+  if (read_keys == 'A' || read_keys == 'B') {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("====================");
+    lcd.setCursor(0, 1);
+    lcd.print("Selecionou produto ");
+    lcd.print(read_keys);
+    lcd.setCursor(0, 2);
+    lcd.print("*-Voltar #-Confirmar");
+    lcd.setCursor(0, 3);
+    lcd.print("====================");
 
-  lcd.setCursor(0, 0);
-  lcd.print("====================");
-  lcd.setCursor(0, 1);
-  lcd.print("Selecione um produto!");
-  lcd.setCursor(0, 3);
-  lcd.print("====================");
-
-  while(read_keys == 'E'){
-    read_keys = this_keypad.getKey();
-  }
-
-  if (read_keys) {
-    switch (read_keys) {
-      case 'A':
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("====================");
-        lcd.setCursor(0, 1);
-        lcd.print("Selecionou produto A");
-        lcd.setCursor(0, 2);
-        lcd.print("#-Confirmar *-Voltar");
-        lcd.setCursor(0, 3);
-        lcd.print("====================");
-        
-        while(read_keys != '#' || read_keys != '*'){
-          read_keys = this_keypad.getKey();
-        }
-
-
-        if (read_keys == '#') {
-          lcd.clear();
-          lcd.setCursor(0, 0);
-          lcd.print("====================");
-          lcd.setCursor(0, 1);
-          lcd.print("Aproxime o cartão");
-          lcd.setCursor(0, 3);
-          lcd.print("====================");
-
-          while(!RC522.isCard()){
-            Serial.println("Cartao");
-          }
-
-          myStepper1.step(stepsPerRevolution);
-          Serial.println("motor girandooo");
-          
-        }
-        break;
+    while (read_keys != '#' && read_keys != '*') {
+      read_keys = this_keypad.getKey();
     }
+    option(read_keys);
   }
-
-
 }
