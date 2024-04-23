@@ -89,12 +89,12 @@ void option(char key) {
     myStepper1.step(stepsPerRevolution);
     Serial.println("motor girandooo");
     printed = false;
-    return
+    return;
   }
 
   else if (key == '*') {
     printed = false;
-    return
+    return;
   }
 }
 
