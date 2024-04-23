@@ -33,6 +33,9 @@ Stepper myStepper2(stepsPerRevolution, 7, 6, 5, 4);
 Servo s;
 bool printed;
 
+char products[2] = { 'A', 'B' };
+float prices[2] = { 5.0, 4.0 };
+
 void setup() {
   Serial.begin(9600);
   lcd.init();
@@ -46,26 +49,29 @@ void setup() {
   printed = false;
 }
 
-void option(char key) {
+void option(char key, int index) {
   if (key == '#') {
+
+    float price = prices[index];
+
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("====================");
     lcd.setCursor(0, 1);
     lcd.print("Aproxime o cartao");
     lcd.setCursor(0, 2);
-    lcd.print("Valor: R$ 5,00");
+    lcd.print("Valor: R$ ");
+    lcd.print(price);
+    Serial.println(price);
     lcd.setCursor(0, 3);
     lcd.print("====================");
 
     int reading = 0;
     while (!RC522.isCard() && reading < 1000) {
-      Serial.println("Lendo cartao");
       reading++;
-      Serial.println(reading);
     }
 
-    if (reading > 1000) {
+    if (reading >= 1000) {
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("====================");
@@ -75,6 +81,8 @@ void option(char key) {
       lcd.print("Compra cancelada");
       lcd.setCursor(0, 3);
       lcd.print("====================");
+      delay(2000);
+      printed = false;
       return;
     }
 
@@ -86,8 +94,32 @@ void option(char key) {
     lcd.setCursor(0, 3);
     lcd.print("====================");
 
-    myStepper1.step(stepsPerRevolution);
-    Serial.println("motor girandooo");
+    if (index == 0) {
+      myStepper1.step(2800);
+    } else if (index == 1) {
+      myStepper2.step(2800);
+    }
+
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("====================");
+    lcd.setCursor(0, 1);
+    lcd.print("Retire seu produto!");
+    lcd.setCursor(0, 3);
+    lcd.print("====================");
+
+    for (pos = 0; pos < 90; pos++) {
+      s.write(pos);
+      delay(15);
+    }
+
+    delay(7500);
+
+    for (pos = 90; pos >= 0; pos--) {
+      s.write(pos);
+      delay(15);
+    }
     printed = false;
     return;
   }
@@ -126,9 +158,18 @@ void loop() {
     lcd.setCursor(0, 3);
     lcd.print("====================");
 
+    int index;
+    for (int i = 0; i < sizeof(products); i++) {
+      if (products[i] == read_keys) {
+        index = i;
+        break;
+      }
+    }
+
     while (read_keys != '#' && read_keys != '*') {
       read_keys = this_keypad.getKey();
     }
-    option(read_keys);
+
+    option(read_keys, index);
   }
 }
