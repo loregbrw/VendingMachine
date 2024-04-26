@@ -32,9 +32,15 @@ Stepper myStepper1(stepsPerRevolution, 13, 12, 11, 10);
 Stepper myStepper2(stepsPerRevolution, 7, 6, 5, 4);
 Servo s;
 bool printed;
+int adm[5] = { 228, 227, 210, 207, 26 };
+bool flag;
 
 char products[2] = { 'A', 'B' };
 float prices[2] = { 5.0, 4.0 };
+
+int size = 1;
+int **cards;
+float *balance;
 
 void setup() {
   Serial.begin(9600);
@@ -47,6 +53,65 @@ void setup() {
   myStepper1.setSpeed(10);
   myStepper2.setSpeed(10);
   printed = false;
+
+  cards = (int **)malloc(size * sizeof(int *));
+  balance = (float *)malloc(size * sizeof(float));
+
+  cards[0] = (int *)malloc(5 * sizeof(int));
+  cards[0][0] = 228;
+  cards[0][1] = 227;
+  cards[0][2] = 210;
+  cards[0][3] = 207;
+  cards[0][4] = 26;
+  balance[0] = 1000000.00;
+}
+
+void admAccess() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("====================");
+  lcd.setCursor(0, 1);
+  lcd.print("1 - Cartao * - Sair");
+  lcd.setCursor(0, 2);
+  lcd.print("2 - Produto");
+  lcd.setCursor(0, 3);
+  lcd.print("====================");
+
+  char read_keys = '0';
+
+  while (read_keys != '1' && read_keys != '*' && read_keys != '2') {
+    read_keys = this_keypad.getKey();
+  }
+
+  if (read_keys == '*') {
+    printed = false;
+    return;
+  } else if (read_keys == '1') {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("====================");
+    lcd.setCursor(0, 1);
+    lcd.print("1 - Alterar saldo");
+    lcd.setCursor(0, 2);
+    lcd.print("2 - Adicionar cartao");
+    lcd.setCursor(0, 3);
+    lcd.print("====================");
+
+    read_keys = '0';
+    while (read_keys != '1' && read_keys != '*' && read_keys != '2') {
+      read_keys = this_keypad.getKey();
+    }
+
+    if (read_keys == '*') {
+      return admAccess();
+    } else if (read_keys = '1') {
+      attBalance();
+    } else if (read_keys == '2') {
+      addCard();
+    }
+  } else if (read_keys == '2') {
+    // amdProduct();
+  }
 }
 
 void option(char key, int index) {
@@ -62,7 +127,6 @@ void option(char key, int index) {
     lcd.setCursor(0, 2);
     lcd.print("Valor: R$ ");
     lcd.print(price);
-    Serial.println(price);
     lcd.setCursor(0, 3);
     lcd.print("====================");
 
@@ -171,5 +235,20 @@ void loop() {
     }
 
     option(read_keys, index);
+  }
+
+  if (RC522.isCard()) {
+    RC522.readCardSerial();
+
+    flag = true;
+    for (int i = 0; i < 5; i++) {
+      if (RC522.serNum[i] != adm[i]) {
+        flag = false;
+        break;
+      }
+    }
+    if (flag) {
+      admAccess();
+    }
   }
 }
