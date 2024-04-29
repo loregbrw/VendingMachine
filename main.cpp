@@ -39,7 +39,7 @@ float prices[2] = { 5.0, 4.0 };
 
 int size = 1;
 int **cards;
-float *balance;
+int *balance;
 
 void setup() {
   Serial.begin(9600);
@@ -54,7 +54,7 @@ void setup() {
   printed = false;
 
   cards = (int **)malloc(size * sizeof(int *));
-  balance = (float *)malloc(size * sizeof(float));
+  balance = (int *)malloc(size * sizeof(int));
 
   cards[0] = (int *)malloc(5 * sizeof(int));
   cards[0][0] = 228;
@@ -84,14 +84,24 @@ bool arrayInCards(int *array) {
 }
 
 bool inArray(char input) {
-   
-  char array[12] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '*', '#'};
+
+  char array[12] = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '*', '#' };
   for (int i = 0; i < 12; i++) {
     if (input == array[i]) {
       return true;
     }
   }
   return false;
+}
+
+int toInt(char *array) {
+  int num = 0;
+
+  for (int i = 0; i != ' '; i++) {
+    num = num * 10 + (array[i] - '0');
+  }
+
+  return num;
 }
 
 void addCard() {
@@ -117,11 +127,6 @@ void addCard() {
 
     int input[5];
     RC522.readCardSerial();
-
-    size++;
-    cards = (int **)realloc(cards, size * sizeof(int *));
-
-    cards[size - 1] = (int *)malloc(5 * sizeof(int));
 
     for (int i = 0; i < 5; i++) {
       input[i] = RC522.serNum[i];
@@ -150,8 +155,8 @@ void addCard() {
     lcd.print("* - Cancelar");
     lcd.setCursor(0, 3);
     lcd.print("====================");
-    
-    char input_balance[10] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+
+    char input_balance[10] = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
 
     char read_keys = 'D';
     while (!inArray(read_keys) || read_keys == '#') {
@@ -160,13 +165,13 @@ void addCard() {
 
     input_balance[0] = read_keys;
     int counter = 1;
-    
+
     while (read_keys != '*') {
       lcd.clear();
       lcd.print("====================");
       lcd.setCursor(0, 1);
       lcd.print("R$ ");
-      for (int i = 0; i < 10; i++){
+      for (int i = 0; i < 10; i++) {
         lcd.print(input_balance[i]);
       }
       lcd.setCursor(0, 2);
@@ -181,6 +186,18 @@ void addCard() {
       }
 
       if (read_keys == '#') {
+
+        size++;
+        cards = (int **)realloc(cards, size * sizeof(int *));
+        cards[size - 1] = (int *)malloc(5 * sizeof(int));
+
+        for (int i = 0; i < 5; i++) {
+          cards[size - 1][i] = input[i];
+        }
+
+        balance = (int *)realloc(balance, size * sizeof(int *));
+        balance[size - 1] = toInt(input_balance);
+
         lcd.clear();
         lcd.setCursor(0, 0);
         lcd.print("====================");
@@ -195,7 +212,7 @@ void addCard() {
         lcd.print("====================");
 
         delay(2000);
-        
+
         printed = false;
         return;
       } else {
