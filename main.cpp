@@ -1,4 +1,3 @@
-
 #include <Keypad.h>
 #include <LiquidCrystal_I2C.h>
 #include <Servo.h>
@@ -63,7 +62,148 @@ void setup() {
   cards[0][2] = 210;
   cards[0][3] = 207;
   cards[0][4] = 26;
-  balance[0] = 1000000.00;
+  balance[0] = 0;
+}
+
+bool arrayEquals(int *array1, int *array2) {
+  for (int i = 0; i < 5; i++) {
+    if (array1[i] != array2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+bool arrayInCards(int *array) {
+  for (int i = 0; i < size; i++) {
+    if (arrayEquals(cards[i], array)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool inArray(char input) {
+   
+  char array[12] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '*', '#'};
+  for (int i = 0; i < 12; i++) {
+    if (input == array[i]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+void addCard() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("====================");
+  lcd.setCursor(0, 1);
+  lcd.print("Aproxime o cartao!");
+  lcd.setCursor(0, 2);
+  lcd.print("* - Cancelar");
+  lcd.setCursor(0, 3);
+  lcd.print("====================");
+
+  char read_keys = '0';
+  while (read_keys != '*' && !RC522.isCard()) {
+    read_keys = this_keypad.getKey();
+  }
+
+
+  if (read_keys == '*') {
+    return admAccess();
+  } else {
+
+    int input[5];
+    RC522.readCardSerial();
+
+    size++;
+    cards = (int **)realloc(cards, size * sizeof(int *));
+
+    cards[size - 1] = (int *)malloc(5 * sizeof(int));
+
+    for (int i = 0; i < 5; i++) {
+      input[i] = RC522.serNum[i];
+    }
+
+    if (arrayInCards(input)) {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("====================");
+      lcd.setCursor(0, 1);
+      lcd.print("Cartao ja cadastrado¹");
+      lcd.setCursor(0, 3);
+      lcd.print("====================");
+
+      delay(2000);
+
+      return admAccess();
+    }
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("====================");
+    lcd.setCursor(0, 1);
+    lcd.print("Selecione o Saldo");
+    lcd.setCursor(0, 2);
+    lcd.print("* - Cancelar");
+    lcd.setCursor(0, 3);
+    lcd.print("====================");
+    
+    char input_balance[10] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+
+    char read_keys = 'D';
+    while (!inArray(read_keys) || read_keys == '#') {
+      read_keys = this_keypad.getKey();
+    }
+
+    input_balance[0] = read_keys;
+    int counter = 1;
+    
+    while (read_keys != '*') {
+      lcd.clear();
+      lcd.print("====================");
+      lcd.setCursor(0, 1);
+      lcd.print("R$ ");
+      for (int i = 0; i < 10; i++){
+        lcd.print(input_balance[i]);
+      }
+      lcd.setCursor(0, 2);
+      lcd.print("# - Confirmar");
+      lcd.setCursor(0, 3);
+      lcd.print("====================");
+
+      read_keys = 'D';
+      while (!inArray(read_keys)) {
+        read_keys = this_keypad.getKey();
+        Serial.println(read_keys);
+      }
+
+      if (read_keys == '#') {
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("====================");
+        lcd.setCursor(0, 1);
+        lcd.print("Saldo adicionado!");
+        lcd.setCursor(0, 2);
+        lcd.print("R$ ");
+        for (int i = 0; i < 10; i++) {
+          lcd.print(input_balance[i]);
+        }
+        lcd.setCursor(0, 3);
+        lcd.print("====================");
+
+        delay(2000);
+        
+        printed = false;
+        return;
+      } else {
+        input_balance[counter] = read_keys;
+        counter++;
+      }
+    }
+  }
 }
 
 void admAccess() {
@@ -104,10 +244,10 @@ void admAccess() {
 
     if (read_keys == '*') {
       return admAccess();
-    } else if (read_keys = '1') {
-      attBalance();
+    } else if (read_keys == '1') {
+      //return attBalance();
     } else if (read_keys == '2') {
-      addCard();
+      return addCard();
     }
   } else if (read_keys == '2') {
     // amdProduct();
