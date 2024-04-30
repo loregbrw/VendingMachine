@@ -106,16 +106,22 @@ int toInt(char *array) {
   return str.toFloat();
 }
 
-void addCard() {
+void printLcd(String par1, String par2, String par3, String par4) {
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("====================");
   lcd.setCursor(0, 1);
-  lcd.print("Aproxime o cartao!");
+  lcd.print(par1);
+  lcd.print(par2);
   lcd.setCursor(0, 2);
-  lcd.print("* - Cancelar");
+  lcd.print(par3);
+  lcd.print(par4);
   lcd.setCursor(0, 3);
   lcd.print("====================");
+}
+
+void addCard() {
+  printLcd("Aproxime o cartao!", "", "* - Cancelar", "");
 
   char read_keys = '0';
   while (read_keys != '*' && !RC522.isCard()) {
@@ -136,28 +142,14 @@ void addCard() {
     Serial.println(arrayInCards(input));
 
     if (arrayInCards(input)) {
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("====================");
-      lcd.setCursor(0, 1);
-      lcd.print("Cartao ja cadastrado");
-      lcd.setCursor(0, 3);
-      lcd.print("====================");
+      printLcd("Cartao ja cadastrado", "", "", "");
 
       delay(2000);
 
       return admAccess();
     }
 
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("====================");
-    lcd.setCursor(0, 1);
-    lcd.print("Selecione o Saldo");
-    lcd.setCursor(0, 2);
-    lcd.print("* - Cancelar");
-    lcd.setCursor(0, 3);
-    lcd.print("====================");
+    printLcd("Selecione o Saldo", "", "* - Cancelar", "");
 
     char input_balance[10] = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
 
@@ -223,19 +215,12 @@ void addCard() {
         counter++;
       }
     }
+    return admAccess();
   }
 }
 
 void attBalance() {
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("====================");
-  lcd.setCursor(0, 1);
-  lcd.print("Aproxime o cartao!");
-  lcd.setCursor(0, 2);
-  lcd.print("* - Cancelar");
-  lcd.setCursor(0, 3);
-  lcd.print("====================");
+  printLcd("Aproxime o cartao!", "", "* - Cancelar", "");
 
   char read_keys = '0';
   while (read_keys != '*' && !RC522.isCard()) {
@@ -256,13 +241,7 @@ void attBalance() {
     int index = arrayInCards(input) - 1;
 
     if (!index) {
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("====================");
-      lcd.setCursor(0, 1);
-      lcd.print("Cartao nao cadastrado");
-      lcd.setCursor(0, 3);
-      lcd.print("====================");
+      printLcd("Cartao nao cadastrado", "", "", "");
 
       delay(2000);
 
@@ -273,16 +252,7 @@ void attBalance() {
         Serial.println(balance[i]);
       }
 
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("====================");
-      lcd.setCursor(0, 1);
-      lcd.print("Selecione o Saldo");
-      lcd.setCursor(0, 2);
-      lcd.print("Atual: R$ ");
-      lcd.print(balance[index]);
-      lcd.setCursor(0, 3);
-      lcd.print("====================");
+      printLcd("Selecione o Saldo", "", "Atual: R$ ", String(balance[index]));
 
       char input_balance[10] = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
 
@@ -338,20 +308,14 @@ void attBalance() {
           counter++;
         }
       }
+      return admAccess();
     }
   }
 }
 
   void admAccess() {
-    lcd.clear();
-    lcd.setCursor(0, 0);
-    lcd.print("====================");
-    lcd.setCursor(0, 1);
-    lcd.print("1 - Cartao * - Sair");
-    lcd.setCursor(0, 2);
-    lcd.print("2 - Produto");
-    lcd.setCursor(0, 3);
-    lcd.print("====================");
+    
+    printLcd("1 - Cartao * - Sair", "", "2 - Produto", "");
 
     char read_keys = '0';
 
@@ -363,15 +327,8 @@ void attBalance() {
       printed = false;
       return;
     } else if (read_keys == '1') {
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("====================");
-      lcd.setCursor(0, 1);
-      lcd.print("1 - Alterar saldo");
-      lcd.setCursor(0, 2);
-      lcd.print("2 - Adicionar cartao");
-      lcd.setCursor(0, 3);
-      lcd.print("====================");
+
+      printLcd("1 - Alterar saldo", "", "2 - Adicionar cartao", "");
 
       read_keys = '0';
       while (read_keys != '1' && read_keys != '*' && read_keys != '2') {
@@ -386,7 +343,7 @@ void attBalance() {
         return addCard();
       }
     } else if (read_keys == '2') {
-      // amdProduct();
+      // admProduct();
     }
   }
 
@@ -395,16 +352,7 @@ void attBalance() {
 
       float price = prices[index];
 
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("====================");
-      lcd.setCursor(0, 1);
-      lcd.print("Aproxime o cartao");
-      lcd.setCursor(0, 2);
-      lcd.print("Valor: R$ ");
-      lcd.print(price);
-      lcd.setCursor(0, 3);
-      lcd.print("====================");
+      printLcd("Aproxime o cartao", "", "Valor: R$ ", String(price));
 
       int reading = 0;
       while (!RC522.isCard() && reading < 1000) {
@@ -412,27 +360,17 @@ void attBalance() {
       }
 
       if (reading >= 1000) {
-        lcd.clear();
-        lcd.setCursor(0, 0);
+
         lcd.print("====================");
-        lcd.setCursor(0, 1);
-        lcd.print("Pagamento expirado!");
-        lcd.setCursor(0, 2);
-        lcd.print("Compra cancelada");
-        lcd.setCursor(0, 3);
-        lcd.print("====================");
+
+        printLcd("Pagamento expirado!", "", "Compra cancelada", "");
+
         delay(2000);
         printed = false;
         return;
       }
 
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("====================");
-      lcd.setCursor(0, 1);
-      lcd.print("Pagamento confirmado!");
-      lcd.setCursor(0, 3);
-      lcd.print("====================");
+      printLcd("Pagamento confirmado!", "", "", "");
 
       if (index == 0) {
         myStepper1.step(2800);
@@ -440,14 +378,7 @@ void attBalance() {
         myStepper2.step(2800);
       }
 
-
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("====================");
-      lcd.setCursor(0, 1);
-      lcd.print("Retire seu produto!");
-      lcd.setCursor(0, 3);
-      lcd.print("====================");
+      printLcd("Retire seu produto!", "", "", "");
 
       for (pos = 0; pos < 90; pos++) {
         s.write(pos);
@@ -474,29 +405,15 @@ void attBalance() {
     char read_keys = this_keypad.getKey();
 
     if (!printed) {
-      lcd.clear();
 
-      lcd.setCursor(0, 0);
-      lcd.print("====================");
-      lcd.setCursor(0, 1);
-      lcd.print("Selecione um produto!");
-      lcd.setCursor(0, 3);
-      lcd.print("====================");
+      printLcd("Selecione um produto!", "", "", "");
 
       printed = true;
     }
 
     if (read_keys == 'A' || read_keys == 'B') {
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("====================");
-      lcd.setCursor(0, 1);
-      lcd.print("Selecionou produto ");
-      lcd.print(read_keys);
-      lcd.setCursor(0, 2);
-      lcd.print("*-Voltar #-Confirmar");
-      lcd.setCursor(0, 3);
-      lcd.print("====================");
+
+      printLcd("Selecionou produto ", String(read_keys), "*-Voltar #-Confirmar", "");
 
       int index;
       for (int i = 0; i < sizeof(products); i++) {
