@@ -249,7 +249,7 @@ void attBalance() {
     int index = arrayInCards(input) - 1;
 
     if (!arrayInCards(input)) {
-      printLcd("Cartao nao cadastrado", "", "", "");
+      printLcd("     Cartao nao", "", "     cadastrado", "");
 
       delay(1500);
 
@@ -359,7 +359,7 @@ void admAccess() {
 void option(char key, int index) {
   if (key == '#') {
 
-    float price = prices[index];
+    int price = prices[index];
 
     printLcd("Aproxime o cartao", "", "Valor: R$ ", String(price));
 
@@ -377,35 +377,61 @@ void option(char key, int index) {
       return;
     }
 
-    // int i = arrayInCards(input) - 1;
+    int input[5];
+    RC522.readCardSerial();
 
-    // if (i) {
+    for (int i = 0; i < 5; i++) {
+      input[i] = RC522.serNum[i];
 
-    // }
-
-    printLcd("Pagamento confirmado!", "", "", "");
-
-    if (index == 0) {
-      myStepper1.step(2800);
-    } else if (index == 1) {
-      myStepper2.step(2800);
+      Serial.print(input[i]);
+      Serial.print('.');
+      Serial.println();
     }
 
-    printLcd("Retire seu produto!", "", "", "");
+    if (arrayInCards(input)) {
+      int i = arrayInCards(input) - 1;
 
-    for (pos = 0; pos < 90; pos++) {
-      s.write(pos);
-      delay(15);
+      if (balance[i] >= price) {
+        balance[i] -= price;
+        printLcd("Pagamento confirmado!", "", "Saldo: R$ ", String(balance[i]));
+      } else {
+        printLcd("Saldo insuficiente!", "", "", "");
+
+        delay(1500);
+
+        printed = false;
+        return;
+      }
+
+      if (index == 0) {
+        myStepper1.step(2800);
+      } else if (index == 1) {
+        myStepper2.step(2800);
+      }
+
+      for (pos = 0; pos < 90; pos++) {
+        s.write(pos);
+        delay(15);
+      }
+
+      printLcd("Retire seu produto!", "", "", "");
+      delay(7500);
+
+      for (pos = 90; pos >= 0; pos--) {
+        s.write(pos);
+        delay(15);
+      }
+
+      printed = false;
+      return;
+    } else {
+      printLcd("     Cartao nao", "", "     cadastrado", "");
+
+      delay(1500);
+
+      printed = false;
+      return;
     }
-
-    delay(7500);
-
-    for (pos = 90; pos >= 0; pos--) {
-      s.write(pos);
-      delay(15);
-    }
-    printed = false;
-    return;
   }
 
   else if (key == '*') {
