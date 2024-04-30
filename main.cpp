@@ -95,14 +95,14 @@ bool inArray(char input) {
 }
 
 int toInt(char *array) {
-  String  str = "";
+  String str = "";
 
   for (int i = 0; i < 10; i++) {
     if (array[i] != ' ') {
       str += array[i];
     }
   }
-  
+
   return str.toFloat();
 }
 
@@ -121,7 +121,7 @@ void printLcd(String par1, String par2, String par3, String par4) {
 }
 
 void addCard() {
-  printLcd("Aproxime o cartao!", "", "* - Cancelar", "");
+  printLcd("Aproxime o cartao!", "", "*-Cancelar", "");
 
   char read_keys = '0';
   while (read_keys != '*' && !RC522.isCard()) {
@@ -137,6 +137,10 @@ void addCard() {
 
     for (int i = 0; i < 5; i++) {
       input[i] = RC522.serNum[i];
+
+      Serial.print(input[i]);
+      Serial.print('.');
+      Serial.println();
     }
 
     Serial.println(arrayInCards(input));
@@ -144,12 +148,12 @@ void addCard() {
     if (arrayInCards(input)) {
       printLcd("Cartao ja cadastrado", "", "", "");
 
-      delay(2000);
+      delay(1500);
 
       return admAccess();
     }
 
-    printLcd("Selecione o Saldo", "", "* - Cancelar", "");
+    printLcd("Selecione o Saldo", "", "*-Cancelar", "");
 
     char input_balance[10] = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
 
@@ -205,7 +209,7 @@ void addCard() {
         lcd.setCursor(0, 3);
         lcd.print("====================");
 
-        delay(2000);
+        delay(1500);
 
         return admAccess();
       } else if (read_keys == '*') {
@@ -220,7 +224,7 @@ void addCard() {
 }
 
 void attBalance() {
-  printLcd("Aproxime o cartao!", "", "* - Cancelar", "");
+  printLcd("Aproxime o cartao!", "", "*-Cancelar", "");
 
   char read_keys = '0';
   while (read_keys != '*' && !RC522.isCard()) {
@@ -236,14 +240,18 @@ void attBalance() {
 
     for (int i = 0; i < 5; i++) {
       input[i] = RC522.serNum[i];
+
+      Serial.print(input[i]);
+      Serial.print('.');
+      Serial.println();
     }
 
     int index = arrayInCards(input) - 1;
 
-    if (!index) {
+    if (!arrayInCards(input)) {
       printLcd("Cartao nao cadastrado", "", "", "");
 
-      delay(2000);
+      delay(1500);
 
       return admAccess();
     } else {
@@ -298,11 +306,12 @@ void attBalance() {
           lcd.setCursor(0, 3);
           lcd.print("====================");
 
-          delay(2000);
-
+          delay(1500);
           return admAccess();
+
         } else if (read_keys == '*') {
           return admAccess();
+
         } else {
           input_balance[counter] = read_keys;
           counter++;
@@ -313,135 +322,139 @@ void attBalance() {
   }
 }
 
-  void admAccess() {
-    
-    printLcd("1 - Cartao * - Sair", "", "2 - Produto", "");
+void admAccess() {
 
-    char read_keys = '0';
+  printLcd("1-Cartao 2-Produto", "", "*-Sair", "");
 
+  char read_keys = '0';
+
+  while (read_keys != '1' && read_keys != '*' && read_keys != '2') {
+    read_keys = this_keypad.getKey();
+  }
+
+  if (read_keys == '*') {
+    printed = false;
+    return;
+  } else if (read_keys == '1') {
+
+    printLcd("1-Alterar saldo", "", "2-Adicionar cartao", "");
+
+    read_keys = '0';
     while (read_keys != '1' && read_keys != '*' && read_keys != '2') {
       read_keys = this_keypad.getKey();
     }
 
     if (read_keys == '*') {
-      printed = false;
-      return;
+      return admAccess();
     } else if (read_keys == '1') {
-
-      printLcd("1 - Alterar saldo", "", "2 - Adicionar cartao", "");
-
-      read_keys = '0';
-      while (read_keys != '1' && read_keys != '*' && read_keys != '2') {
-        read_keys = this_keypad.getKey();
-      }
-
-      if (read_keys == '*') {
-        return admAccess();
-      } else if (read_keys == '1') {
-        return attBalance();
-      } else if (read_keys == '2') {
-        return addCard();
-      }
+      return attBalance();
     } else if (read_keys == '2') {
-      // admProduct();
+      return addCard();
     }
+  } else if (read_keys == '2') {
+    // admProduct();
   }
+}
 
-  void option(char key, int index) {
-    if (key == '#') {
+void option(char key, int index) {
+  if (key == '#') {
 
-      float price = prices[index];
+    float price = prices[index];
 
-      printLcd("Aproxime o cartao", "", "Valor: R$ ", String(price));
+    printLcd("Aproxime o cartao", "", "Valor: R$ ", String(price));
 
-      int reading = 0;
-      while (!RC522.isCard() && reading < 1000) {
-        reading++;
-      }
+    int reading = 0;
+    while (!RC522.isCard() && reading < 1000) {
+      reading++;
+    }
 
-      if (reading >= 1000) {
+    if (reading >= 1000) {
 
-        lcd.print("====================");
+      printLcd("Pagamento expirado!", "", "Compra cancelada", "");
 
-        printLcd("Pagamento expirado!", "", "Compra cancelada", "");
-
-        delay(2000);
-        printed = false;
-        return;
-      }
-
-      printLcd("Pagamento confirmado!", "", "", "");
-
-      if (index == 0) {
-        myStepper1.step(2800);
-      } else if (index == 1) {
-        myStepper2.step(2800);
-      }
-
-      printLcd("Retire seu produto!", "", "", "");
-
-      for (pos = 0; pos < 90; pos++) {
-        s.write(pos);
-        delay(15);
-      }
-
-      delay(7500);
-
-      for (pos = 90; pos >= 0; pos--) {
-        s.write(pos);
-        delay(15);
-      }
+      delay(1500);
       printed = false;
       return;
     }
 
-    else if (key == '*') {
-      printed = false;
-      return;
+    // int i = arrayInCards(input) - 1;
+
+    // if (i) {
+
+    // }
+
+    printLcd("Pagamento confirmado!", "", "", "");
+
+    if (index == 0) {
+      myStepper1.step(2800);
+    } else if (index == 1) {
+      myStepper2.step(2800);
     }
+
+    printLcd("Retire seu produto!", "", "", "");
+
+    for (pos = 0; pos < 90; pos++) {
+      s.write(pos);
+      delay(15);
+    }
+
+    delay(7500);
+
+    for (pos = 90; pos >= 0; pos--) {
+      s.write(pos);
+      delay(15);
+    }
+    printed = false;
+    return;
   }
 
-  void loop() {
-    char read_keys = this_keypad.getKey();
+  else if (key == '*') {
+    printed = false;
+    return;
+  }
+}
 
-    if (!printed) {
+void loop() {
+  char read_keys = this_keypad.getKey();
 
-      printLcd("Selecione um produto!", "", "", "");
+  if (!printed) {
 
-      printed = true;
+    printLcd("Selecione um produto!", "", "", "");
+
+    printed = true;
+  }
+
+  if (read_keys == 'A' || read_keys == 'B') {
+
+    printLcd("Selecionou produto ", String(read_keys), "*-Voltar #-Confirmar", "");
+
+    int index;
+    for (int i = 0; i < sizeof(products); i++) {
+      if (products[i] == read_keys) {
+        index = i;
+        break;
+      }
     }
 
-    if (read_keys == 'A' || read_keys == 'B') {
-
-      printLcd("Selecionou produto ", String(read_keys), "*-Voltar #-Confirmar", "");
-
-      int index;
-      for (int i = 0; i < sizeof(products); i++) {
-        if (products[i] == read_keys) {
-          index = i;
-          break;
-        }
-      }
-
-      while (read_keys != '#' && read_keys != '*') {
-        read_keys = this_keypad.getKey();
-      }
-
-      option(read_keys, index);
+    while (read_keys != '#' && read_keys != '*') {
+      read_keys = this_keypad.getKey();
     }
 
-    if (RC522.isCard()) {
-      RC522.readCardSerial();
+    option(read_keys, index);
+  }
 
-      flag = true;
-      for (int i = 0; i < 5; i++) {
-        if (RC522.serNum[i] != adm[i]) {
-          flag = false;
-          break;
-        }
+  if (RC522.isCard()) {
+    RC522.readCardSerial();
+
+    flag = true;
+    for (int i = 0; i < 5; i++) {
+      if (RC522.serNum[i] != adm[i]) {
+        flag = false;
+        break;
       }
-      if (flag) {
-        admAccess();
-      }
+    }
+    if (flag) {
+      admAccess();
     }
   }
+}
