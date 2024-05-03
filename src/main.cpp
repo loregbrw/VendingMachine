@@ -140,6 +140,8 @@ void addCard() {
 
       Serial.print(input[i]);
       Serial.print('.');
+      Serial.print(RC522.serNum[i]);
+      Serial.print('-');
       Serial.println();
     }
 
@@ -245,6 +247,8 @@ void attBalance() {
 
       Serial.print(input[i]);
       Serial.print('.');
+      Serial.print(RC522.serNum[i]);
+      Serial.print('-');
       Serial.println();
     }
 
@@ -261,8 +265,18 @@ void attBalance() {
       for (int i = 0; i < sizeof(balance); i++) {
         Serial.println(balance[i]);
       }
-      //ARRUMAR AQUI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ".00"
-      printLcd("Selecione o Saldo", "", "Atual: R$ ", String(balance[index]));
+      
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("====================");
+      lcd.setCursor(0, 1);
+      lcd.print("Selecione o saldo");
+      lcd.setCursor(0, 2);
+      lcd.print("Atual: R$ ");
+      lcd.print(balance[index]);
+      lcd.print(".00");
+      lcd.setCursor(0, 3);
+      lcd.print("====================");
 
       char input_balance[10] = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
 
@@ -327,7 +341,7 @@ void attBalance() {
 }
 
 void admProduct() {
-  printLcd("Selecione o produto", "", "A e B", "");
+  printLcd("Selecione o produto", "", "A ou B", "");
 
   char read_keys = '0';
   while (read_keys != '*' && read_keys != 'A' && read_keys != 'B') {
@@ -359,7 +373,17 @@ void admProduct() {
     return admAccess();
   }
 
-  printLcd("Selecione o preco", "", "Atual: R$ ", String(prices[index]));
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("====================");
+  lcd.setCursor(0, 1);
+  lcd.print("Selecione o preco");
+  lcd.setCursor(0, 2);
+  lcd.print("Atual: R$ ");
+  lcd.print(prices[index]);
+  lcd.print(".00");
+  lcd.setCursor(0, 3);
+  lcd.print("====================");
 
   char input_price[10] = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
 
@@ -422,6 +446,18 @@ void admProduct() {
 
 void admAccess() {
 
+  for (int i = 0; i < size; i++) {
+    Serial.print("Cards[");
+    Serial.print(i);
+    Serial.print("]: ");
+    for (int j = 0; j < 5; j++) {
+      Serial.print(cards[i][j]);
+      Serial.print(" ");
+    }
+    Serial.println();
+  }
+
+
   printLcd("1-Cartao 2-Produto", "", "*-Sair", "");
 
   char read_keys = '0';
@@ -483,6 +519,8 @@ void option(char key, int index) {
 
       Serial.print(input[i]);
       Serial.print('.');
+      Serial.print(RC522.serNum[i]);
+      Serial.print('-');
       Serial.println();
     }
 
@@ -502,9 +540,9 @@ void option(char key, int index) {
       }
 
       if (index == 0) {
-        myStepper1.step(2800);
+        myStepper1.step(5000);
       } else if (index == 1) {
-        myStepper2.step(2800);
+        myStepper2.step(5000);
       }
 
       for (pos = 0; pos < 90; pos++) {
