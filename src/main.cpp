@@ -260,12 +260,17 @@ void attBalance() {
       delay(1500);
 
       return admAccess();
+    } else if (index == 0) {
+      printLcd("    Operacao nao", "", "     autorizada", "");
+      delay(1500);
+      return admAccess();
+      
     } else {
 
       for (int i = 0; i < sizeof(balance); i++) {
         Serial.println(balance[i]);
       }
-      
+
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("====================");
@@ -494,8 +499,17 @@ void option(char key, int index) {
   if (key == '#') {
 
     int price = prices[index];
-
-    printLcd("Aproxime o cartao", "", "Valor: R$ ", String(price));
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("====================");
+    lcd.setCursor(0, 1);
+    lcd.print("Aproxime o cartao");
+    lcd.setCursor(0, 2);
+    lcd.print("Valor: R$ ");
+    lcd.print(String(price));
+    lcd.print(".00");
+    lcd.setCursor(0, 3);
+    lcd.print("====================");
 
     int reading = 0;
     while (!RC522.isCard() && reading < 1000) {
@@ -529,7 +543,18 @@ void option(char key, int index) {
 
       if (balance[i] >= price) {
         balance[i] -= price;
-        printLcd("Pagamento confirmado!", "", "Saldo: R$ ", String(balance[i]));
+
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("====================");
+        lcd.setCursor(0, 1);
+        lcd.print("Pagamento confirmado!");
+        lcd.setCursor(0, 2);
+        lcd.print("Saldo: R$ ");
+        lcd.print(String(balance[i]));
+        lcd.print(".00");
+        lcd.setCursor(0, 3);
+        lcd.print("====================");
       } else {
         printLcd("Saldo insuficiente!", "", "", "");
 
