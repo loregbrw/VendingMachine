@@ -1,23 +1,90 @@
-# VendingMachine
+# Automatic Vending Machine
 
-Link de referência: https://blog.eletrogate.com/maquina-de-vendas-automatica-com-rfid-e-nodemcu/ <br>
-Link motor de passo: https://www.aranacorp.com/pt/controlar-um-motor-de-passo-com-arduino/#google_vignette <br>
-Link keypad 4x4: https://www.robocore.net/tutoriais/usando-teclado-matricial-com-arduino <br>
-Link RFID com Mega: https://www.instructables.com/Interfacing-RFID-RC522-With-Arduino-MEGA-a-Simple-/<br>
-Link Servomotor: https://blog.fazedores.com/como-usar-servo-motor-com-arduino/<br>
-Link Servo: https://blog.fazedores.com/como-usar-servo-motor-com-arduino/<br>
-Link Imagem Pinos Arduino Mega: https://www.marinostore.com/arduino/arduino-mega-2560-r3 <br>
-<p>
-  Link para o docs da documentação: https://docs.google.com/document/d/1rSgrE3YotzaOtS6BBUFxVIAzgdmtufVPdt3-B2ZccWA/edit?usp=sharing
-</p>
+This project encompasses the development of an automatic vending machine controlled by an Arduino Mega 2560 microcontroller. The machine integrates various components to provide a seamless vending experience, offering user authentication, product selection, payment processing, and product dispensing functionalities.
+##
 
-<hr>
+### Components Overview
+**Arduino Mega 2560:** \
+The Arduino Mega 2560 serves as the brain of the vending machine, coordinating the operation of all other components and executing the programmed logic for user interaction and product management.
 
-- 1 Display LCD
-- 2 Motores de passo
-- 1 Teclado Membrana Matricial
-- 1 Mega 2560
-- 1 Servomotor
-- 1 Leitor Rfid
-- 3 Leds de cores variadas
-- 1 Protoboard
+**20x4 LCD Display:** \
+The LCD display provides a user-friendly interface for displaying information such as product selections, payment status, and system messages. Its 20x4 character configuration ensures ample space for clear and concise communication with users.
+
+**Stepper Motors:** \
+Two stepper motors are employed for product dispensing purposes. These motors enable precise control over the rotation of dispensing mechanisms, ensuring accurate product delivery to users.
+
+**4x4 Membrane Matrix Keypad:** \
+The membrane matrix keypad facilitates user input, allowing customers to navigate through product options, confirm selections, and enter payment information. Its compact design and intuitive layout make it easy for users to interact with the vending machine.
+
+**Servo Motor:** \
+A servo motor is utilized for auxiliary functions such as opening and closing the product dispensing mechanism. Its precise angular control enables smooth and reliable operation, enhancing the overall user experience.
+
+**RFID Reader RC522:** \
+The RFID reader RC522 enables secure user authentication using RFID cards. By scanning and validating RFID credentials, the vending machine ensures that only authorized users can access its features and make purchases.
+
+**Protoboard:** \
+The protoboard serves as a platform for assembling and connecting the electronic components of the vending machine. It provides a convenient and organized layout for wiring and ensures reliable electrical connections between components.
+##
+
+### Features and Functionality
+**User Authentication:**
+- Users can authenticate themselves by presenting RFID cards to the RFID reader RC522.
+- Only users with valid RFID credentials are granted access to the vending machine's functionalities.
+
+**Product Selection:**
+- The membrane matrix keypad enables users to browse through available products and make selections.
+- The LCD display provides real-time feedback on product options, helping users make informed choices.
+
+**Payment Processing:**
+- Upon selecting a product, users can enter payment information using the membrane matrix keypad.
+- The vending machine verifies payment details and deducts the appropriate amount from the user's account balance.
+
+**Product Dispensing:**
+- Once payment is confirmed, the vending machine initiates the dispensing process using the stepper motors and servo motor.
+- Products are dispensed accurately and efficiently, ensuring a seamless transaction experience for users.
+
+**Administration Mode:**
+- An administration mode is available for system maintenance and management tasks.
+- Authorized personnel can use this mode to add new RFID cards, configure product prices, and monitor system status.
+##
+
+### Testing
+Unit tests are provided for individual components to ensure proper functionality. Additionally, integration tests can be performed to validate the system's operation as a whole. Refer to the provided test scripts and documentation for testing instructions.
+##
+
+### Installation
+To set up the system, follow these steps:
+
+**Hardware Setup:**
+- Connect the components according to the provided pin configurations and physical setup.
+
+**Software Installation:**
+- Clone this repository to your local machine.
+- Open the Arduino IDE and import the necessary libraries for the components used.
+- Compile and upload the code to your Arduino board.
+##
+
+### Usage
+Once the system is installed, follow these steps to use it:
+- Power on the vending machine.
+- Follow the instructions displayed on the LCD screen.
+- Use the keypad to select products, add balance, or perform administrative tasks.
+- Complete the payment process using an RFID card.
+- Collect the dispensed product and any change, if applicable.
+##
+
+### References and Tutorials
+- [Automatic Vending Machine with RFID and NodeMCU](https://blog.eletrogate.com/maquina-de-vendas-automatica-com-rfid-e-nodemcu/)
+- [Arduino Tutorial Controlling a Stepper Motor](https://www.aranacorp.com/pt/controlar-um-motor-de-passo-com-arduino/#google_vignette)
+- [Using Membrane Matrix Keypad with Arduino](https://www.robocore.net/tutoriais/usando-teclado-matricial-com-arduino)
+- [Interfacing RFID RC522 with Arduino MEGA](https://www.instructables.com/Interfacing-RFID-RC522-With-Arduino-MEGA-a-Simple-/)
+- [How to Use Servo Motor with Arduino](https://blog.fazedores.com/como-usar-servo-motor-com-arduino/)
+##
+
+### Documentation
+For further details and technical specifications, refer to the comprehensive documentation available in the Detailed Documentation document.
+<br><br>
+
+> [!NOTE]
+> **1.** Ensure to configure the pins correctly according to the physical setup of the components.\
+> **2.** The provided tests help to verify the functionality of individual components.
