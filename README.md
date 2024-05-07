@@ -45,7 +45,7 @@ The protoboard serves as a platform for assembling and connecting the electronic
 
 **Administration Mode:**
 - An administration mode is available for system maintenance and management tasks.
-- Authorized personnel can use this mode to add new RFID cards, configure product prices, and monitor system status.
+- Authorized personnel can configure product prices, use this mode to add new RFID cards, and change their balance..
 ##
 
 ### Testing
