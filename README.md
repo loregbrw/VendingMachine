@@ -95,5 +95,5 @@ Feel free to explore these resources for a deeper understanding of the project's
 <br><br>
 
 > [!NOTE]
-> **1.** If using pur code ensure to configure the pins correctly according to the physical setup of the components.\
+> **1.** If using our code, ensure to configure the pins correctly according to the physical setup of the components.\
 > **2.** The provided tests help to verify the functionality of individual components.
