@@ -45,7 +45,7 @@ The protoboard serves as a platform for assembling and connecting the electronic
 
 **Administration Mode:**
 - An administration mode is available for system maintenance and management tasks.
-- Authorized personnel can use this mode to add new RFID cards, configure product prices, and monitor system status.
+- Authorized personnel can configure product prices, use this mode to add new RFID cards, and change their balance..
 ##
 
 ### Testing
@@ -82,9 +82,18 @@ Once the system is installed, follow these steps to use it:
 ##
 
 ### Documentation
-For further details and technical specifications, refer to the comprehensive documentation available in the Detailed Documentation document.
+
+In the `docs` folder of this repository, you can find comprehensive documentation for this project in both Portuguese and English:
+
+- [Portuguese Documentation (PDF)](docs/Documentação.pdf)
+- [English Documentation (PDF)](docs/Documentation.pdf)
+
+Additionally, a video detailing the development process of this project is available on YouTube:
+[Development Process Video](https://youtu.be/4j8oVVgXNdc)
+
+Feel free to explore these resources for a deeper understanding of the project's implementation and functionality.
 <br><br>
 
 > [!NOTE]
-> **1.** Ensure to configure the pins correctly according to the physical setup of the components.\
+> **1.** If using pur code ensure to configure the pins correctly according to the physical setup of the components.\
 > **2.** The provided tests help to verify the functionality of individual components.
