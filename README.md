@@ -92,7 +92,12 @@ Additionally, a video detailing the development process of this project is avail
 [Development Process Video](https://youtu.be/4j8oVVgXNdc)
 
 Feel free to explore these resources for a deeper understanding of the project's implementation and functionality.
-<br><br>
+
+##
+### License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+<br>
 
 > [!NOTE]
 > **1.** If using our code, ensure to configure the pins correctly according to the physical setup of the components.\
