@@ -1,7 +1,6 @@
 # Automatic Vending Machine
 
 This project encompasses the development of an automatic vending machine controlled by an Arduino Mega 2560 microcontroller. The machine integrates various components to provide a seamless vending experience, offering user authentication, product selection, payment processing, and product dispensing functionalities.
-##
 
 ### Components Overview
 **Arduino Mega 2560:** \
@@ -24,7 +23,6 @@ The RFID reader RC522 enables secure user authentication using RFID cards. By sc
 
 **Protoboard:** \
 The protoboard serves as a platform for assembling and connecting the electronic components of the vending machine. It provides a convenient and organized layout for wiring and ensures reliable electrical connections between components.
-##
 
 ### Features and Functionality
 **User Authentication:**
@@ -46,11 +44,9 @@ The protoboard serves as a platform for assembling and connecting the electronic
 **Administration Mode:**
 - An administration mode is available for system maintenance and management tasks.
 - Authorized personnel can configure product prices, use this mode to add new RFID cards, and change their balance..
-##
 
 ### Testing
 Unit tests are provided for individual components to ensure proper functionality. Additionally, integration tests can be performed to validate the system's operation as a whole. Refer to the provided test scripts and documentation for testing instructions.
-##
 
 ### Installation
 To set up the system, follow these steps:
@@ -62,7 +58,6 @@ To set up the system, follow these steps:
 - Clone this repository to your local machine.
 - Open the Arduino IDE and import the necessary libraries for the components used.
 - Compile and upload the code to your Arduino board.
-##
 
 ### Usage
 Once the system is installed, follow these steps to use it:
@@ -71,7 +66,6 @@ Once the system is installed, follow these steps to use it:
 - Use the keypad to select products, add balance, or perform administrative tasks.
 - Complete the payment process using an RFID card.
 - Collect the dispensed product and any change, if applicable.
-##
 
 ### References and Tutorials
 - [Automatic Vending Machine with RFID and NodeMCU](https://blog.eletrogate.com/maquina-de-vendas-automatica-com-rfid-e-nodemcu/)
@@ -79,7 +73,6 @@ Once the system is installed, follow these steps to use it:
 - [Using Membrane Matrix Keypad with Arduino](https://www.robocore.net/tutoriais/usando-teclado-matricial-com-arduino)
 - [Interfacing RFID RC522 with Arduino MEGA](https://www.instructables.com/Interfacing-RFID-RC522-With-Arduino-MEGA-a-Simple-/)
 - [How to Use Servo Motor with Arduino](https://blog.fazedores.com/como-usar-servo-motor-com-arduino/)
-##
 
 ### Documentation
 
@@ -93,9 +86,8 @@ Additionally, a video detailing the development process of this project is avail
 
 Feel free to explore these resources for a deeper understanding of the project's implementation and functionality.
 
-##
 ### License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
 <br>
 
